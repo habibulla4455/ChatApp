@@ -1,3 +1,29 @@
-<p>
-  login works!
-</p>
+<div id="container">
+
+  <mat-card>
+    <mat-card-content>
+
+      <div>
+        <p id="header">Sign in</p>
+      </div>
+
+      <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+        <mat-form-field color="accent">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email">
+          <mat-error *ngIf="loginForm.get('email').invalid">This is required.</mat-error>
+        </mat-form-field>
+        <mat-form-field color="accent">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password">
+          <mat-error *ngIf="loginForm.get('password').invalid">This is required.</mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button>LOG IN</button>
+      </form>
+
+    </mat-card-content>
+  </mat-card>
+  <span>Have an account? <a routerLink="registration">Sign up.</a></span>
+
+</div>

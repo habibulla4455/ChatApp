@@ -1,0 +1,22 @@
+#container {
+  display: flex;
+  height: 100vh;
+
+  .mat-card {
+    width: 80vw;
+    margin: 20vh auto auto;
+
+    #header {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    .mat-form-field {
+      width: 100%;
+    }
+
+    .mat-raised-button {
+      float: right;
+    }
+  }
+}

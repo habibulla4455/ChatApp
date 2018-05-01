@@ -6,6 +6,7 @@
     "main": "index.js",
     "scripts": {
         "b": "ln -s ../dist www",
+        "c": "cordova run android",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "Apache Cordova Team",

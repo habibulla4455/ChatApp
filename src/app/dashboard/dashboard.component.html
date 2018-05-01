@@ -1,0 +1,31 @@
+<mat-drawer-container>
+
+  <mat-drawer>
+
+  </mat-drawer>
+
+  <div id="drawer-content">
+
+    <mat-toolbar>
+      <span>Chat Me</span>
+      <button mat-icon-button [matMenuTriggerFor]="settings">
+        <mat-icon>settings</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <router-outlet></router-outlet>
+
+  </div>
+
+</mat-drawer-container>
+
+<mat-menu #settings>
+  <button mat-menu-item>
+    <mat-icon>account_circle</mat-icon>
+    Preferences
+  </button>
+  <button mat-menu-item>
+    <mat-icon>power_settings_new</mat-icon>
+    Logout
+  </button>
+</mat-menu>

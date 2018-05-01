@@ -1,0 +1,11 @@
+#drawer-content {
+  height: 100vh;
+
+  .mat-toolbar {
+    display: flex;
+
+    .mat-icon-button {
+      margin-left: auto;
+    }
+  }
+}

@@ -1,3 +1,50 @@
-<p>
-  registration works!
-</p>
+<div id="container">
+
+  <mat-card>
+    <mat-card-content>
+
+      <div>
+        <p id="header">Registration</p>
+      </div>
+
+      <form (ngSubmit)="onSubmit()" [formGroup]="signupForm">
+        <mat-form-field color="accent">
+          <mat-label>Email</mat-label>
+          <input matInput type="text" formControlName="email">
+          <mat-error *ngIf="signupForm.get('email').invalid">
+            <mat-error *ngIf="email.required">This is required.</mat-error>
+            <mat-error *ngIf="email.pattern">Not a valid email address.</mat-error>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field color="accent">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password">
+          <mat-error *ngIf="signupForm.get('password').invalid">
+            <mat-error *ngIf="password.required">This is required.</mat-error>
+            <mat-error *ngIf="password.minlength">Password too short.</mat-error>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field color="accent">
+          <mat-label>Confirm assword</mat-label>
+          <input matInput type="password" formControlName="confirm">
+          <mat-error *ngIf="signupForm.get('confirm').invalid">
+            <mat-error *ngIf="confirm.isNotMatched">Password not matched.</mat-error>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field color="accent">
+          <mat-label>Display name</mat-label>
+          <input matInput type="text" formControlName="display">
+          <mat-error *ngIf="signupForm.get('display').invalid">
+            <mat-error *ngIf="display.required">This is required.</mat-error>
+            <mat-error *ngIf="display.minlength">Display name too short.</mat-error>
+            <mat-error *ngIf="display.containsAlpha && !display.containsNone">Must contain atleast 1 lowercase character.</mat-error>
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button>CREATE ACCOUNT</button>
+      </form>
+
+    </mat-card-content>
+  </mat-card>
+
+</div>
