@@ -5,6 +5,7 @@
 
       <div>
         <p id="header">Sign in</p>
+        <button mat-icon-button type="button" [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
       </div>
 
       <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
@@ -23,7 +24,18 @@
       </form>
 
     </mat-card-content>
+    <mat-card-footer *ngIf="isSigningin">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </mat-card-footer>
   </mat-card>
-  <span>Have an account? <a routerLink="registration">Sign up.</a></span>
 
 </div>
+
+<mat-menu #menu>
+  <button mat-menu-item (click)="onSigninAnonymously()">
+    Sign in anonymously
+  </button>
+  <button mat-menu-item (click)="onCreateAccount()">
+    Create an account
+  </button>
+</mat-menu>

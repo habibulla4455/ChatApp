@@ -1,0 +1,28 @@
+div {
+  display: flex;
+}
+
+.mat-card {
+  width: 80vw;
+  margin: auto;
+  margin-bottom: 3vh;
+
+  .mat-card-content {
+    display: flex;
+    justify-content: space-between;
+
+    div {
+      display: flex;
+      span {
+        margin: auto;
+      }
+    }
+
+    .mat-raised-button {
+      height: auto;
+      span {
+        line-height: normal;
+      }
+    }
+  }
+}

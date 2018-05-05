@@ -5,6 +5,7 @@
   .mat-card {
     width: 80vw;
     margin: 20vh auto auto;
+    padding-bottom: 0;
 
     #header {
       font-size: 2em;
@@ -17,6 +18,7 @@
 
     .mat-raised-button {
       float: right;
+      margin-bottom: 24px;
     }
   }
 }

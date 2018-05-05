@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-// import * as firebase from 'firebase';
+import { Router, ActivatedRoute } from '@angular/router';
+
+import { SharedService } from './common/core/services/shared.service';
 
 @Component({
   selector: 'app-root',
@@ -7,16 +9,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-  constructor() {
-    // const firestore = firebase.firestore();
-    //
-    // const settings = <firebase.firestore.Settings>{
-    //   timestampsInSnapshots: true,
-    //   host: 'localhost:7000',
-    //   ssl: false
-    // };
-    //
-    // firestore.settings(settings);
+  constructor(private router: Router, private route: ActivatedRoute, private sharedService: SharedService) {
+    this.router.navigate(['dashboard'])
+    this.sharedService.modeValue = true;
   }
 
 }

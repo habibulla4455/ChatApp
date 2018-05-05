@@ -1,0 +1,31 @@
+<div id="container">
+  <form (ngSubmit)="onSubmit()" [formGroup]="newRoomForm">
+    <mat-form-field color="accent">
+      <mat-label>Room name</mat-label>
+      <input matInput type="text" formControlName="room_name">
+      <mat-error *ngIf="room_name !== null">
+        <mat-error *ngIf="room_name.required">This is required.</mat-error>
+        <mat-error *ngIf="room_name.maxlength">Room name must be less than 17 characters.</mat-error>
+        <mat-error *ngIf="room_name.minlength">Room name must be greater than 5 characters.</mat-error>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field color="accent">
+      <mat-label>Number of participants</mat-label>
+      <input matInput type="number" formControlName="num_participants">
+      <mat-error *ngIf="num_participants !== null">
+        <mat-error *ngIf="num_participants.required">This is required.</mat-error>
+        <mat-error *ngIf="num_participants.max">Participants must be less than 51.</mat-error>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field color="accent">
+      <mat-label>Room password</mat-label>
+      <input matInput type="text" formControlName="room_password">
+      <mat-error *ngIf="room_password !== null">
+        <mat-error *ngIf="room_password.required">This is required.</mat-error>
+        <mat-error *ngIf="room_password.maxlength">Room name must be less than 7 characters.</mat-error>
+        <mat-error *ngIf="room_password.minlength">Room name must be greater than 2 characters.</mat-error>
+      </mat-error>
+    </mat-form-field>
+    <button mat-raised-button>CREATE ROOM</button>
+  </form>
+</div>

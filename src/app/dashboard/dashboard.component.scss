@@ -1,11 +1,29 @@
+.mat-drawer {
+  width: 70vw;
+}
+
 #drawer-content {
   height: 100vh;
 
   .mat-toolbar {
+    position: fixed;
     display: flex;
+    z-index: 2;
 
-    .mat-icon-button {
+    #menu {
+      margin-right: 5px;
+    }
+
+    #add {
       margin-left: auto;
     }
+
+    #settings {
+      margin-left: 1vw;
+    }
+  }
+
+  #content-container {
+    // padding-top: 11vh;
   }
 }

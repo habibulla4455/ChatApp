@@ -14,6 +14,7 @@ export class RegistrationComponent implements OnInit {
 
   signupForm: FormGroup;
   current: string;
+  isSigningin: boolean;
 
   constructor(@Inject(FormBuilder) public fb: FormBuilder, private firestoreService: FirestoreService) {
     this.signupForm = fb.group({
@@ -25,6 +26,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isSigningin = false;
     this.current = this.signupForm.value.password;
 
     this.signupForm.valueChanges.subscribe((response) => {
@@ -60,9 +62,12 @@ export class RegistrationComponent implements OnInit {
       return;
     }
 
+    this.isSigningin = true;
+
     this.firestoreService.createNewUser(this.signupForm.value)
       .catch((e) => {
 
+        this.isSigningin = false;
         const email = this.signupForm.value.email;
         this.signupForm.reset();
         this.signupForm.patchValue({ email });

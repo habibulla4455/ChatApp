@@ -5,6 +5,15 @@
   .mat-card {
     width: 80vw;
     margin: 20vh auto auto;
+    padding-bottom: 0;
+
+    div {
+      display: flex;
+
+      .mat-icon-button {
+        margin-left: auto;
+      }
+    }
 
     #header {
       font-size: 2em;
@@ -17,14 +26,7 @@
 
     .mat-raised-button {
       float: right;
+      margin-bottom: 24px;
     }
-  }
-
-  span {
-    left: 0;
-    right: 0;
-    position: absolute;
-    text-align: center;
-    margin-top: 58vh;
   }
 }

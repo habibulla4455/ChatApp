@@ -11,25 +11,24 @@ export class AuthService {
     });
   }
 
+  get uid() {
+    return this.afAuth.auth.currentUser.uid;
+  }
+
   createUserWithEmailAndPassword(email: string, password: string): Promise<any> {
-    return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
-      .then((response) => {
-        this.router.navigate(['dashboard']);
-      });
+    return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
   }
 
   signInAnonymously(): Promise<any> {
-    return this.afAuth.auth.signInAnonymously()
-      .then((response) => {
-        this.router.navigate(['dashboard']);
-      });
+    return this.afAuth.auth.signInAnonymously();
   }
 
   signInWithEmailAndPassword(email: string, password: string): Promise<any> {
-    return this.afAuth.auth.signInWithEmailAndPassword(email, password)
-      .then((response) => {
-        this.router.navigate(['dashboard']);
-      });
+    return this.afAuth.auth.signInWithEmailAndPassword(email, password);
+  }
+
+  signOut(): Promise<any> {
+    return this.afAuth.auth.signOut();
   }
 
 }

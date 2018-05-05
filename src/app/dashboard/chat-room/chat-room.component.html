@@ -1,0 +1,73 @@
+<mat-drawer-container>
+
+  <mat-drawer #drawer>
+
+    <router-outlet></router-outlet>
+
+  </mat-drawer>
+
+
+  <div id="drawer-content">
+
+    <mat-toolbar>
+
+      <button mat-icon-button (click)="drawer.toggle()" id="menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <span>{{ roomDetails.room_name }}'s room</span>
+
+      <button mat-icon-button id="details">
+        <mat-icon>info_outline</mat-icon>
+      </button>
+
+    </mat-toolbar>
+
+    <div id="content-container">
+
+      <div id="chat-container">
+        <div id="chat">
+
+          <div *ngFor="let message of (messages | async); let i = index" id="loop">
+            <div [ngClass]="{ 'you': auth.uid === message?.uid, 'others': auth.uid !== message?.uid }" id="element">
+              <div id="message-content">
+
+                <div id="img" *ngIf="auth.uid === message?.uid">
+                  <img src="https://getl.io/eJjUt" alt="god-madara-uchiha" width="50" height="50">
+                </div>
+                <div id="message">
+                  <p>{{ message?.message }}</p>
+                </div>
+                <div id="img" *ngIf="auth.uid !== message?.uid">
+                  <img src="https://getl.io/eJjUt" alt="god-madara-uchiha" width="50" height="50">
+                </div>
+              </div>
+              <div id="message-action">
+                <span>{{ message?.timestamp | timestamp }}</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="chat-textbox">
+
+        <mat-form-field color="accent">
+          <textarea #message matInput placeholder="Type a message." matTextareaAutosize matAutosizeMaxRows="1" maxLength="500" [(ngModel)]="textarea"></textarea>
+          <mat-hint align="end">{{message.value.length}} / 500</mat-hint>
+        </mat-form-field>
+
+        <div id="send">
+          <button mat-icon-button (click)="onSubmit()">
+            <mat-icon>send</mat-icon>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</mat-drawer-container>

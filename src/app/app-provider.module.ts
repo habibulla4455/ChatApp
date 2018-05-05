@@ -2,14 +2,17 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { OverlayModule } from "@angular/cdk/overlay";
 
-import { AngularFireModule } from 'angularfire2';
+import { AngularFireModule, FirebaseApp } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireStorageModule } from 'angularfire2/storage';
+import * as firebase from 'firebase';
 
 import { AuthService } from './common/core/services/auth.service';
 import { FirestoreService } from './common/core/services/firestore.service';
+import { SharedService } from './common/core/services/shared.service';
 
 import { environment } from '../environments/environment';
 
@@ -22,13 +25,21 @@ import { environment } from '../environments/environment';
   exports: [
     BrowserModule,
     BrowserAnimationsModule,
+    OverlayModule,
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireStorageModule
   ],
   providers: [
     AuthService,
-    FirestoreService
+    FirestoreService,
+    SharedService
   ]
 })
-export class AppProviderModule { }
+export class AppProviderModule {
+
+  constructor(private app: FirebaseApp) {
+    app.firestore().settings({ timestampsInSnapshots: true });
+  }
+
+}
