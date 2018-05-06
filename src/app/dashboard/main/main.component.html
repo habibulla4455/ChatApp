@@ -1,3 +1,15 @@
+<mat-card>
+  <mat-card-content>
+    <div>
+      <span>Public Room</span><br>
+    </div>
+    <button mat-icon-button color="accent" (click)="onEnterPublic()" [disabled]="false">
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
+  </mat-card-content>
+</mat-card>
+
+<hr>
 
 <div *ngFor="let room of (rooms | async)">
   <mat-card>

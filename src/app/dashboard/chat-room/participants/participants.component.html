@@ -1,40 +1,14 @@
 <mat-list>
 
   <h3 mat-subheader>Room participants</h3>
-  <mat-list-item>
+  <mat-list-item *ngFor="let participant of (participants | async); last as isLast">
     <img mat-list-avatar src="https://getl.io/eJjUt">
-    <h4 mat-line>madara uchiha</h4>
+    <h4 mat-line>{{ participant?.user_name }}</h4>
     <p mat-line>
       <span>Joined -- </span>
-      <span class="demo-secondary-text">Mar 21, 18</span>
+      <span class="demo-secondary-text">{{ participant?.timestamp | timestamp }}</span>
     </p>
-    <mat-divider inset></mat-divider>
-  </mat-list-item>
-  <mat-list-item>
-    <img mat-list-avatar src="https://getl.io/eJjUt">
-    <h4 mat-line>madara uchiha</h4>
-    <p mat-line>
-      <span>Joined -- </span>
-      <span class="demo-secondary-text">Mar 21, 18</span>
-    </p>
-    <mat-divider inset></mat-divider>
-  </mat-list-item>
-  <mat-list-item>
-    <img mat-list-avatar src="https://getl.io/eJjUt">
-    <h4 mat-line>madara uchiha</h4>
-    <p mat-line>
-      <span>Joined -- </span>
-      <span class="demo-secondary-text">Mar 21, 18</span>
-    </p>
-    <mat-divider inset></mat-divider>
-  </mat-list-item>
-  <mat-list-item>
-    <img mat-list-avatar src="https://getl.io/eJjUt">
-    <h4 mat-line>madara uchiha</h4>
-    <p mat-line>
-      <span>Joined -- </span>
-      <span class="demo-secondary-text">Mar 21, 18</span>
-    </p>
+    <mat-divider inset *ngIf="!isLast"></mat-divider>
   </mat-list-item>
 
 </mat-list>

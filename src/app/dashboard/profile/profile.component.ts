@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+
+import { FirestoreService } from '../../common/core/services/firestore.service';
 
 @Component({
   selector: 'app-profile',
@@ -7,9 +10,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor() { }
+  user: Observable<any>;
+
+  constructor(private firestore: FirestoreService) { }
 
   ngOnInit() {
+    this.user = this.firestore.currentUser;
   }
 
 }

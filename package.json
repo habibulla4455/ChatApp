@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "s": "ng serve --port 7000",
-    "b": "ng build --prod --build-optimizer",
+    "b": "ng build --prod",
     "d": "firebase deploy",
     "a": "git add .",
     "p": "git push -u origin master",
@@ -28,7 +28,7 @@
     "@angular/platform-browser": "^6.0.0",
     "@angular/platform-browser-dynamic": "^6.0.0",
     "@angular/router": "^6.0.0",
-    "@firebase/app": "^0.1.6",
+    "@firebase/app": "^0.2.0",
     "angularfire2": "^5.0.0-rc.7.2-next",
     "bootstrap": "^4.1.0",
     "core-js": "^2.4.1",
@@ -41,7 +41,7 @@
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.5.8",
+    "@angular-devkit/build-angular": "^0.6.0",
     "@angular/cli": "^6.0.0",
     "@angular/compiler-cli": "^6.0.0",
     "@angular/language-service": "^6.0.0",

@@ -19,7 +19,8 @@ import { environment } from '../environments/environment';
 @NgModule({
   imports: [
     CommonModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig)
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFirestoreModule.enablePersistence(),
   ],
   declarations: [],
   exports: [

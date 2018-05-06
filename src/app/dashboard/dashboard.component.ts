@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import * as _ from "lodash";
 
 import { AuthService } from '../common/core/services/auth.service';
 import { SharedService } from '../common/core/services/shared.service';
@@ -15,13 +16,14 @@ import { NewRoomDialogComponent } from '../common/shared/components/new-room-dia
 export class DashboardComponent implements OnInit {
 
   newRoomDialogComponent: MatDialogRef<NewRoomDialogComponent>;
+  inOtherRoute: boolean = false;
   isChatMode: boolean = false;
 
   constructor(private router: Router, private dialog: MatDialog, private route: ActivatedRoute, private authService: AuthService, private sharedService: SharedService) { }
 
   ngOnInit() {
     this.isChatMode = false;
-    
+
     this.router.events.filter(e => e instanceof NavigationEnd).subscribe((response: NavigationEnd) => {
       const route = response.urlAfterRedirects.split('/').slice(1);
       const isinRoom = route.includes('room');
@@ -30,6 +32,16 @@ export class DashboardComponent implements OnInit {
 
     this.sharedService.modeChanged.subscribe((response) => {
       setTimeout(() => (this.isChatMode = response), 50);
+    });
+
+    this.router.events.filter(e => e instanceof NavigationEnd).subscribe((response: NavigationEnd) => {
+      const route = response.urlAfterRedirects.split('/').slice(1);
+      const isinRoom = route.includes('room');
+
+      const a = route.includes('room');
+      const b = route.includes('profile');
+      const c = route.includes('preferences');
+      this.inOtherRoute = a || b || c;
     });
   }
 

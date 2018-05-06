@@ -19,8 +19,8 @@ import {CdkTreeModule} from '@angular/cdk/tree';
 import {NgModule} from '@angular/core';
 import {
   MatAutocompleteModule,
-  // MatBadgeModule,
-  // MatBottomSheetModule,
+  MatBadgeModule,
+  MatBottomSheetModule,
   MatButtonModule,
   MatButtonToggleModule,
   MatCardModule,
@@ -53,7 +53,7 @@ import {
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
-  // MatTreeModule
+  MatTreeModule
 } from '@angular/material';
 
 
@@ -63,8 +63,8 @@ import {
 @NgModule({
   exports: [
     MatAutocompleteModule,
-    // MatBadgeModule,
-    // MatBottomSheetModule,
+    MatBadgeModule,
+    MatBottomSheetModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
@@ -96,7 +96,7 @@ import {
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-    // MatTreeModule,
+    MatTreeModule,
     MatNativeDateModule,
     CdkTableModule,
     CdkTreeModule,

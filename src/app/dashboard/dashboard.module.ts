@@ -26,7 +26,7 @@ import { JoinRoomConfirmationDialogComponent } from '../common/shared/components
     DashboardComponent,
     MainComponent,
     NewRoomDialogComponent,
-    JoinRoomConfirmationDialogComponent
+    JoinRoomConfirmationDialogComponent,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

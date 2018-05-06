@@ -15,10 +15,16 @@
         <mat-icon>menu</mat-icon>
       </button>
 
-      <span>{{ roomDetails.room_name }}'s room</span>
+      <div *ngIf="roomDetails.room_name !== 'Public Room'; else default">
+        <span>{{ roomDetails.room_name }}'s room</span>
+      </div>
 
-      <button mat-icon-button id="details">
-        <mat-icon>info_outline</mat-icon>
+      <ng-template #default>
+        <span>{{ roomDetails.room_name }}</span>
+      </ng-template>
+
+      <button mat-icon-button [matMenuTriggerFor]="menu" id="details">
+        <mat-icon>settings</mat-icon>
       </button>
 
     </mat-toolbar>
@@ -26,20 +32,20 @@
     <div id="content-container">
 
       <div id="chat-container">
-        <div id="chat">
+        <div id="chat" #content>
 
           <div *ngFor="let message of (messages | async); let i = index" id="loop">
-            <div [ngClass]="{ 'you': auth.uid === message?.uid, 'others': auth.uid !== message?.uid }" id="element">
+            <div [ngClass]="{ 'you': auth.uid !== message?.uid, 'others': auth.uid === message?.uid }" id="element">
               <div id="message-content">
 
-                <div id="img" *ngIf="auth.uid === message?.uid">
-                  <img src="https://getl.io/eJjUt" alt="god-madara-uchiha" width="50" height="50">
+                <div id="img" *ngIf="auth.uid !== message?.uid">
+                  <img src="https://getl.io/eJjUt" alt="god-madara-uchiha" width="50" height="50" (click)="onShowProfile(message)">
                 </div>
                 <div id="message">
                   <p>{{ message?.message }}</p>
                 </div>
-                <div id="img" *ngIf="auth.uid !== message?.uid">
-                  <img src="https://getl.io/eJjUt" alt="god-madara-uchiha" width="50" height="50">
+                <div id="img" *ngIf="auth.uid === message?.uid">
+                  <img src="https://getl.io/eJjUt" alt="god-madara-uchiha" width="50" height="50" (click)="onShowProfile(message)">
                 </div>
               </div>
               <div id="message-action">
@@ -71,3 +77,14 @@
   </div>
 
 </mat-drawer-container>
+
+<mat-menu #menu>
+  <button mat-menu-item (click)="seeRoomDetails()">
+    <mat-icon>info</mat-icon>
+    Room details
+  </button>
+  <button mat-menu-item [routerLink]="['/', 'dashboard']">
+    <mat-icon>close</mat-icon>
+    Leave room
+  </button>
+</mat-menu>

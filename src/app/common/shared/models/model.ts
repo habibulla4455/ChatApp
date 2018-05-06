@@ -22,3 +22,27 @@ export class UserModel {
     public display: string
   ) {}
 }
+
+export class Participants {
+  constructor(
+    public user_name: string,
+    public timestamp: string,
+    public room_name: string
+  ) {}
+}
+
+export class CustomUpload {
+
+  file: File;
+  uid: string;
+  fileName: string;
+  progress: number;
+  bytesTransferred: number;
+  downloadURL: string;
+  totalBytes: number;
+
+  constructor(file: File) {
+    this.file = file;
+  }
+
+}

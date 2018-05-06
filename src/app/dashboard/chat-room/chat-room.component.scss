@@ -19,12 +19,12 @@
 
   #content-container {
     #chat-container {
-      height: 79.5vh;
+      height: 79vh;
 
       #chat {
         height: 100%;
         width: 100vw;
-        overflow-y: auto;
+        overflow: auto;
 
         #loop {
           display: flex;

@@ -1,0 +1,36 @@
+#container {
+  #accordion-container {
+    width: 80vw;
+    margin: auto;
+
+    .mat-form-field {
+      width: 100%;
+    }
+
+    #img-container {
+      width: 100%;
+      display: flex;
+
+      img {
+        margin: 0 auto;
+      }
+    }
+
+    #btn-container {
+      display: flex;
+      flex-flow: column wrap;
+
+      button {
+        margin: 0 1vw;
+      }
+
+      span {
+        text-align: center;
+      }
+    }
+
+    .mat-action-row {
+      padding-bottom: 0;
+    }
+  }
+}

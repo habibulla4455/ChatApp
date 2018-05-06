@@ -1,0 +1,13 @@
+<div id="container">
+  <form (ngSubmit)="onSubmit()" [formGroup]="urlForm">
+    <mat-form-field color="accent">
+      <mat-label>Image url</mat-label>
+      <input matInput type="text" formControlName="url">
+      <mat-error *ngIf="this.urlForm.get('url').invalid">
+        <mat-error *ngIf="url.required">This is required.</mat-error>
+        <mat-error *ngIf="url.pattern">Invalid url.</mat-error>
+      </mat-error>
+    </mat-form-field>
+    <button mat-raised-button>SELECT</button>
+  </form>
+</div>

@@ -1,0 +1,41 @@
+#container {
+  display: flex;
+
+  #img-container {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    display: flex;
+
+    img {
+      margin: auto;
+      margin-top: 0;
+      margin-bottom: 0;
+      border-radius: 100%;
+    }
+  }
+
+  .mat-card {
+    margin: auto;
+    margin-top: 12.5vh;
+    padding-top: 14vh;
+    width: 80vw;
+
+    #display {
+      font-size: 2em;
+      text-align: center;
+      margin: 0;
+    }
+    #email {
+      font-size: 1.5em;
+      text-align: center;
+      margin: 0;
+    }
+    #timestamp {
+      font-size: 1em;
+      text-align: center;
+      margin: 1vh 0 0 0;
+      color: rgb(124, 124, 124)
+    }
+  }
+}

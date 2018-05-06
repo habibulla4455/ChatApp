@@ -17,8 +17,12 @@
 
       <span [routerLink]="['/', 'dashboard']">Chat Me</span>
 
-      <button mat-icon-button id="add" (click)="newRoom()">
+      <button mat-icon-button (click)="newRoom()" [ngClass]="{ 'add': !inOtherRoute }" [ngStyle]="{ 'display': inOtherRoute ? 'none' : 'block' }">
         <mat-icon>add_box</mat-icon>
+      </button>
+
+      <button mat-icon-button [routerLink]="['/', 'dashboard']" [ngClass]="{ 'add': inOtherRoute }" [ngStyle]="{ 'display': !inOtherRoute ? 'none' : 'block' }">
+        <mat-icon>dashboard</mat-icon>
       </button>
 
       <button mat-icon-button [matMenuTriggerFor]="settings" id="settings">

@@ -10,7 +10,7 @@ import { SharedService } from './common/core/services/shared.service';
 export class AppComponent {
 
   constructor(private router: Router, private route: ActivatedRoute, private sharedService: SharedService) {
-    this.router.navigate(['dashboard'])
+    // this.router.navigate(['dashboard']);
     this.sharedService.modeValue = true;
   }
 

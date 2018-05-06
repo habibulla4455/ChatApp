@@ -8,6 +8,7 @@ import { Material2Module } from '../../common/core/modules/material2.module';
 import { ChatRoomResolver } from './chat-room.resolver';
 
 import { ChatRoomComponent } from './chat-room.component';
+import { RoomDetailsDialogComponent } from '../../common/shared/components/room-details-dialog/room-details-dialog.component';
 import { TimestampPipe } from '../../common/shared/pipes/timestamp.pipe';
 
 @NgModule({
@@ -19,7 +20,11 @@ import { TimestampPipe } from '../../common/shared/pipes/timestamp.pipe';
   ],
   declarations: [
     ChatRoomComponent,
+    RoomDetailsDialogComponent,
     TimestampPipe
+  ],
+  entryComponents: [
+    RoomDetailsDialogComponent
   ],
   providers: [
     ChatRoomResolver
