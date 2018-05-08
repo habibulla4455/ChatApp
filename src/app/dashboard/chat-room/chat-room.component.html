@@ -39,13 +39,13 @@
               <div id="message-content">
 
                 <div id="img" *ngIf="auth.uid !== message?.uid">
-                  <img src="https://getl.io/eJjUt" alt="god-madara-uchiha" width="50" height="50" (click)="onShowProfile(message)">
+                  <img src="{{ message?.url }}" alt="god-madara-uchiha" width="50" height="50" (click)="onShowProfile(message)">
                 </div>
                 <div id="message">
                   <p>{{ message?.message }}</p>
                 </div>
                 <div id="img" *ngIf="auth.uid === message?.uid">
-                  <img src="https://getl.io/eJjUt" alt="god-madara-uchiha" width="50" height="50" (click)="onShowProfile(message)">
+                  <img src="{{ message?.url }}" alt="god-madara-uchiha" width="50" height="50" (click)="onShowProfile(message)">
                 </div>
               </div>
               <div id="message-action">
@@ -59,13 +59,21 @@
 
       <div id="chat-textbox">
 
-        <mat-form-field color="accent">
-          <textarea #message matInput placeholder="Type a message." matTextareaAutosize matAutosizeMaxRows="1" maxLength="500" [(ngModel)]="textarea"></textarea>
-          <mat-hint align="end">{{message.value.length}} / 500</mat-hint>
-        </mat-form-field>
+        <div *ngIf="condition; else other" class="w-100">
+          <mat-form-field color="accent" class="w-100">
+            <textarea #message matInput placeholder="TODO: LAST FEATURE" matTextareaAutosize matAutosizeMaxRows="1" maxLength="500" [(ngModel)]="textarea"></textarea>
+            <mat-hint align="end">{{message.value.length}} / 500</mat-hint>
+          </mat-form-field>
+        </div>
+        <ng-template #other class="w-100">
+          <mat-form-field color="accent" class="w-100">
+            <textarea #message matInput placeholder="Type a message." matTextareaAutosize matAutosizeMaxRows="1" maxLength="500" [(ngModel)]="textarea"></textarea>
+            <mat-hint align="end">{{message.value.length}} / 500</mat-hint>
+          </mat-form-field>
+        </ng-template>
 
         <div id="send">
-          <button mat-icon-button (click)="onSubmit()">
+          <button mat-icon-button (click)="onSubmit()" [disabled]="condition ? true : false">
             <mat-icon>send</mat-icon>
           </button>
         </div>

@@ -1,6 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
+import { PreferenceService } from '../../../core/services/preference.service';
+
 @Component({
   selector: 'app-update-confirmation-dialog',
   templateUrl: './update-confirmation-dialog.component.html',
@@ -8,7 +10,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 })
 export class UpdateConfirmationDialogComponent implements OnInit {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<UpdateConfirmationDialogComponent>) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<UpdateConfirmationDialogComponent>, private preferenceService: PreferenceService) { }
 
   ngOnInit() {
   }
@@ -36,24 +38,24 @@ export class UpdateConfirmationDialogComponent implements OnInit {
   }
 
   updateDisplay() {
-    console.log('display', this.data.form);
-    this.dialogRef.close();
+    const form = this.data.form;
+    this.preferenceService.updateDisplay(form);
   }
 
   updateEmailI() {
-    console.log('email', this.data.form);
-    this.dialogRef.close();
+    const form = this.data.form;
+    this.preferenceService.updateEmailI(form);
   }
 
   updatePassword() {
-    console.log('password', this.data.form);
-    this.dialogRef.close();
+    const form = this.data.form;
+    this.preferenceService.updatePassword(form);
   }
 
   updateAvatar() {
-    console.log('avatar', this.data.form);
-    console.log('avatar', this.data.newUrl);
-    this.dialogRef.close();
+    const form = this.data.form;
+    const newUrl = this.data.newUrl;
+    this.preferenceService.updateAvatar(form, newUrl);
   }
 
 }

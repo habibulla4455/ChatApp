@@ -17,11 +17,17 @@ export class RegistrationComponent implements OnInit {
   isSigningin: boolean;
 
   constructor(@Inject(FormBuilder) public fb: FormBuilder, private firestoreService: FirestoreService) {
+    // this.signupForm = fb.group({
+    //   'email': [ 'q@q.com', [ Validators.required, Validators.pattern(EMAILPATTERN), CustomValidator.containsNone ] ],
+    //   'password': [ '123123', [ Validators.required, Validators.minLength(6), CustomValidator.containsNone ] ],
+    //   'confirm': [ '123123', [ this.confirmCheck.bind(this), CustomValidator.containsNone ] ],
+    //   'display': [ 'madara', [ Validators.required, Validators.minLength(6), CustomValidator.containAlpha, CustomValidator.containsNone ] ]
+    // })
     this.signupForm = fb.group({
-      'email': [ 'q@q.com', [ Validators.required, Validators.pattern(EMAILPATTERN), CustomValidator.containsNone ] ],
-      'password': [ '123123', [ Validators.required, Validators.minLength(6), CustomValidator.containsNone ] ],
-      'confirm': [ '123123', [ this.confirmCheck.bind(this), CustomValidator.containsNone ] ],
-      'display': [ 'madara', [ Validators.required, Validators.minLength(6), CustomValidator.containAlpha, CustomValidator.containsNone ] ]
+      'email': [ '', [ Validators.required, Validators.pattern(EMAILPATTERN), CustomValidator.containsNone ] ],
+      'password': [ '', [ Validators.required, Validators.minLength(6), CustomValidator.containsNone ] ],
+      'confirm': [ '', [ this.confirmCheck.bind(this), CustomValidator.containsNone ] ],
+      'display': [ '', [ Validators.required, Validators.minLength(6), CustomValidator.containAlpha, CustomValidator.containsNone ] ]
     })
   }
 

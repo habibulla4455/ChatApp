@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
-import { DocumentChangeType, DocumentChange, QueryDocumentSnapshot  } from '@firebase/firestore-types';
+// import { DocumentChangeType, DocumentChange, QueryDocumentSnapshot } from '@firebase/firestore-types';
 import { take } from 'rxjs/operators';
 import * as moment from 'moment';
 import * as _ from "lodash";
 
 import { User } from '../../shared/interfaces/interface';
-import { MessageModel, UserModel, Participants, Room } from '../../shared/models/model';
+import { MessageModel, UserModel, OnlineUsers, Metadata,  Participants, Room } from '../../shared/models/model';
 import { AuthService } from './auth.service';
 
-interface DocumentChangeAction { type: DocumentChangeType; payload: DocumentChange; }
+// interface DocumentChangeAction { type: DocumentChangeType; payload: DocumentChange; }
 
 @Injectable()
 export class FirestoreService {
@@ -19,12 +19,14 @@ export class FirestoreService {
   roomsRef: AngularFirestoreCollection<any>;
   messagesRef: AngularFirestoreCollection<any>;
   participantsRef: AngularFirestoreCollection<any>;
+  onlineUsersRef: AngularFirestoreCollection<any>;
 
   constructor(private firestore: AngularFirestore, private router: Router, private route: ActivatedRoute, private auth: AuthService) {
     this.usersRef = firestore.collection('users');
     this.roomsRef = firestore.collection('rooms');
     this.messagesRef = firestore.collection('messages')
     this.participantsRef = firestore.collection('participants')
+    this.onlineUsersRef = firestore.collection('online')
   }
 
   // ADD NEW USER
@@ -33,10 +35,17 @@ export class FirestoreService {
       .then((response: any) => {
 
         const uid = <string>response.uid;
-        const newUser = new UserModel(uid, user.email, user.password, user.display);
+        const avatar = { url: 'https://getl.io/eJjUt' };
+        const timestamp = moment().format('X');
+        const newUser = new UserModel(uid, user.email, user.password, user.display, timestamp, avatar);
 
-        this.usersRef.add({ ...newUser, timestamp: moment().format('X') });
-        this.router.navigate(['dashboard'], { relativeTo: this.route });
+        const metadata = new Metadata('online', timestamp);
+        const online = new OnlineUsers(uid, user.display, timestamp);
+
+        this.usersRef.add({ ...newUser  })
+          .then(() => (this.router.navigate(['dashboard'], { relativeTo: this.route })));
+
+        this.onlineUsersRef.add({ ...online, metadata: { ...metadata } });
 
       });
   }
@@ -44,10 +53,10 @@ export class FirestoreService {
   // ADD NEW ROOM
   createNewRoom(room: Room) {
 
-    const user = this.usersRef.snapshotChanges().map((action: DocumentChangeAction[]) => {
-      return action.map((change: DocumentChangeAction) => {
+    const user = this.usersRef.snapshotChanges().map((action: any[]) => {
+      return action.map((change: any) => {
 
-        const document = <QueryDocumentSnapshot>change.payload.doc;
+        const document = <any>change.payload.doc;
         const current = this.auth.uid;
         const uid = document.get('uid');
         return uid === current ? document.data() : null;
@@ -59,6 +68,35 @@ export class FirestoreService {
       return this.roomsRef.add({ ...room, host, timestamp: moment().format('X') });
 
     });
+
+  }
+
+  setUserOnline(option: string = 'online') {
+
+    this.onlineUsersRef.snapshotChanges().pipe(  ).map((action: any[]) => {
+
+      return action.map((change: any) => {
+        const document = <any>change.payload.doc;
+        const uid = this.auth.uid;
+
+        if (document.get('uid') === uid) {
+
+          const timestamp = moment().format('X');
+          const meta = { status: option, timestamp };
+
+          let newData = document.data();
+          newData['metadata'] = meta;
+          document.ref.set(newData, { merge: true });
+
+        }
+      });
+
+    }).subscribe(() => { });
+  }
+
+  setUserOffline(option: string = 'false') {
+
+    this.setUserOnline(option);
 
   }
 
@@ -77,22 +115,34 @@ export class FirestoreService {
 
   // GET MESSAGES BY ROOM NAME
   messages(room_name: string) {
-    return this.messagesRef.snapshotChanges().map((action: DocumentChangeAction[]) => {
-      const newAction = action.map((change: DocumentChangeAction) => {
-        const document = <QueryDocumentSnapshot>change.payload.doc;
+    const users = this.usersRef.valueChanges();
+
+    const messages = this.messagesRef.snapshotChanges().map((action: any[]) => {
+      const newAction = action.map((change: any) => {
+        const document = <any>change.payload.doc;
         const condition = document.get('room_name') === room_name;
         return condition ? { ...document.data(), key: document.id } : null;
       }).filter(e => e !== null);
 
       return <any[]>_.sortBy(newAction, [(message) => message.timestamp]);
     });
+
+    return users.switchMap((user) => {
+      return messages.map((message) => {
+        return message.map((_message) => {
+          const _user = user.filter(e => e.uid === _message.uid)[0];
+          return { ..._message, url: _user.avatar.url }
+        })
+      })
+    });
   }
 
   // ADD NEW PARTICIPANT IN ROOM
   newRoomParticipant(user: User, room: Room) {
 
+    const uid = this.auth.uid;
     const timestamp = moment().format('X');
-    const participant = new Participants(user.display, timestamp, room.room_name);
+    const participant = new Participants(uid, user.display, timestamp, room.room_name, user.avatar.url);
 
     this.participantsRef.valueChanges().pipe( take(1) ).subscribe((response: any[]) => {
 
@@ -122,9 +172,10 @@ export class FirestoreService {
 
   // GET PARTICIPANTS OF SELECTED ROOM
   participants(room_name: string) {
-    return this.participantsRef.snapshotChanges().map((action: DocumentChangeAction[]) => {
-      let uniq = action.map((change: DocumentChangeAction) => {
-        const document = <QueryDocumentSnapshot>change.payload.doc;
+
+    return this.participantsRef.snapshotChanges().map((action: any[]) => {
+      let uniq = action.map((change: any) => {
+        const document = <any>change.payload.doc;
         return document.get('room_name') === room_name ? document.data() : null;
       }).filter(e => e !== null);
 
@@ -132,7 +183,25 @@ export class FirestoreService {
       const sorted = <any[]>_.sortBy(uniq, [(room) => room.timestamp]);
 
       return sorted.reverse();
-    })
+    });
+
+  }
+
+  get onlineUsers() {
+    const onlineUsers = this.onlineUsersRef.valueChanges();
+    const users = this.usersRef.valueChanges();
+
+    return onlineUsers.switchMap((_onlineUsers) => {
+
+      return users.map((_users) => {
+        const uid = this.auth.uid;
+        return _onlineUsers.map((element) => {
+          const url =_users.filter(e => e.uid === element.uid)[0].avatar.url;
+          return { ...element, url };
+        })
+      })
+
+    });
   }
 
   // DISPLAY ROOMS IN DASHBOARD

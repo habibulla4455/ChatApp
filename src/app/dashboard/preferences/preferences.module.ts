@@ -10,6 +10,7 @@ import { PreferenceService } from '../../common/core/services/preference.service
 import { PreferencesComponent } from './preferences.component';
 import { UpdateConfirmationDialogComponent } from '../../common/shared/components/update-confirmation-dialog/update-confirmation-dialog.component';
 import { CloudQueueDialogComponent } from '../../common/shared/components/cloud-queue-dialog/cloud-queue-dialog.component';
+import { ReauthDialogComponent } from '../../common/shared/components/reauth-dialog/reauth-dialog.component';
 
 @NgModule({
   imports: [
@@ -21,11 +22,13 @@ import { CloudQueueDialogComponent } from '../../common/shared/components/cloud-
   declarations: [
     PreferencesComponent,
     UpdateConfirmationDialogComponent,
-    CloudQueueDialogComponent
+    CloudQueueDialogComponent,
+    ReauthDialogComponent
   ],
   entryComponents: [
     UpdateConfirmationDialogComponent,
-    CloudQueueDialogComponent
+    CloudQueueDialogComponent,
+    ReauthDialogComponent
   ],
   providers: [
     PreferenceService

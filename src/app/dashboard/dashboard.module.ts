@@ -7,6 +7,7 @@ import { Material2Module } from '../common/core/modules/material2.module';
 
 import { DashboardComponent } from './dashboard.component';
 import { MainComponent } from './main/main.component';
+import { DrawerContentComponent } from './drawer-content/drawer-content.component';
 
 import { NewRoomDialogComponent } from '../common/shared/components/new-room-dialog/new-room-dialog.component';
 import { JoinRoomConfirmationDialogComponent } from '../common/shared/components/join-room-confirmation-dialog/join-room-confirmation-dialog.component';
@@ -25,6 +26,7 @@ import { JoinRoomConfirmationDialogComponent } from '../common/shared/components
   declarations: [
     DashboardComponent,
     MainComponent,
+    DrawerContentComponent,
     NewRoomDialogComponent,
     JoinRoomConfirmationDialogComponent,
   ],

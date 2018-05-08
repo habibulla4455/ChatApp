@@ -1,3 +1,5 @@
+type url = { url: string; }
+
 export class MessageModel {
   constructor(
     public uid: string,
@@ -19,30 +21,47 @@ export class UserModel {
     public uid: string,
     public email: string,
     public password: string,
-    public display: string
+    public display: string,
+    public timestamp: string,
+    public avatar: url
   ) {}
 }
 
 export class Participants {
   constructor(
+    public uid: string,
     public user_name: string,
     public timestamp: string,
-    public room_name: string
+    public room_name: string,
+    public url: string
   ) {}
 }
 
-export class CustomUpload {
+export class Upload {
 
-  file: File;
-  uid: string;
-  fileName: string;
-  progress: number;
-  bytesTransferred: number;
-  downloadURL: string;
   totalBytes: number;
+  url: string;
+  fileName: string;
+  contentType: string;
+  timeCreated: string;
 
-  constructor(file: File) {
-    this.file = file;
-  }
+  constructor(
+    public file: File
+  ) { }
 
+}
+
+export class Metadata {
+  constructor(
+    status: string,
+    timestamp: string
+  ) {}
+}
+
+export class OnlineUsers {
+  constructor(
+    public uid: string,
+    public display: string,
+    public timestamp: string,
+  ) {}
 }

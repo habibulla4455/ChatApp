@@ -1,7 +1,7 @@
 <div id="container">
 
   <div id="img-container">
-    <img src="https://getl.io/eJjUt" alt="god-madara-uchiha" width="170" height="170">
+    <img src="{{ (user | async)?.avatar?.url }}" alt="god-madara-uchiha" width="170" height="170">
   </div>
 
   <mat-card>

@@ -25,6 +25,7 @@ export class ChatRoomComponent implements OnInit {
   roomDetails: Room;
   textarea: string = '';
   element: Element;
+  condition: boolean;
 
   constructor(private router: Router, private route: ActivatedRoute, private dialog: MatDialog, private firestore: FirestoreService, private auth: AuthService, private sharedService: SharedService) { }
 
@@ -35,6 +36,8 @@ export class ChatRoomComponent implements OnInit {
     this.route.data.subscribe((data: Data) => {
       this.roomDetails = data.room;
     });
+
+    this.condition = this.roomDetails.num_participants === Infinity;
 
     this.sharedService.modeValue = true;
     this.messages = this.firestore.messages(this.roomDetails.room_name);

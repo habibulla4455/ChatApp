@@ -1,11 +1,15 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatDialog, MatDialogRef, MatExpansionPanel } from '@angular/material';
+import { Observable } from 'rxjs/Observable';
 
-import { CustomUpload } from '../../common/shared/models/model';
+import { Upload } from '../../common/shared/models/model';
+
+import { FirestoreService } from '../../common/core/services/firestore.service';
 
 import { UpdateConfirmationDialogComponent } from '../../common/shared/components/update-confirmation-dialog/update-confirmation-dialog.component';
 import { CloudQueueDialogComponent } from '../../common/shared/components/cloud-queue-dialog/cloud-queue-dialog.component';
+import { ReauthDialogComponent } from '../../common/shared/components/reauth-dialog/reauth-dialog.component';
 
 const EMAILPATTERN: RegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -19,38 +23,38 @@ export class PreferencesComponent implements OnInit {
   preferencesForm: FormGroup;
   confirmationRef: MatDialogRef<UpdateConfirmationDialogComponent>;
   cloudRef: MatDialogRef<CloudQueueDialogComponent>;
+  reauthRef: MatDialogRef<ReauthDialogComponent>;
   @ViewChild('display')  displayPanel: MatExpansionPanel;
   @ViewChild('email')    emailPanel: MatExpansionPanel;
   @ViewChild('password') passwordPanel: MatExpansionPanel;
   @ViewChild('avatar')   avatarPanel: MatExpansionPanel;
-  current: string;
-  newUrl: string = '';
-  showClear: boolean = false;
+  user: Observable<any>;
   targetFiles: FileList;
   upload: File;
-  file: CustomUpload;
+  file: Upload;
+  showClear: boolean = false;
+  newUrl: string = '';
+  current: string;
 
-  constructor(@Inject(FormBuilder) public fb: FormBuilder, private dialog: MatDialog) {
+  constructor(@Inject(FormBuilder) public fb: FormBuilder, private dialog: MatDialog, private firestore: FirestoreService) {
     this.preferencesForm = fb.group({
       updateDisplay: fb.group({
-        'display': [ 'Uchiha_Madara', [ Validators.required, Validators.minLength(6), CustomValidator.containAlpha ] ]
+        'display': [ '', [ Validators.required, Validators.minLength(6), CustomValidator.containAlpha ] ]
       }),
       updateEmail: fb.group({
-        'email': [ 'q@a.com', [ Validators.required, Validators.pattern(EMAILPATTERN) ] ]
+        'email': [ '', [ Validators.required, Validators.pattern(EMAILPATTERN) ] ]
       }),
       updatePassword: fb.group({
-        'password': [ '123456', [ Validators.required, Validators.minLength(6) ] ],
-        'confirm': [ '123456', [ Validators.required, this.confirmCheck.bind(this) ] ]
+        'password': [ '', [ Validators.required, Validators.minLength(6) ] ],
+        'confirm': [ '', [ Validators.required, this.confirmCheck.bind(this) ] ]
       }),
     })
   }
 
   ngOnInit() {
     // this.displayPanel.open();
-    // this.emailPanel.open();
-    // this.passwordPanel.open();
     this.avatarPanel.open();
-
+    this.user = this.firestore.currentUser;
     this.current = this.preferencesForm.value['updatePassword'].password;
 
     this.preferencesForm.valueChanges.subscribe((response) => {
@@ -58,10 +62,10 @@ export class PreferencesComponent implements OnInit {
       this.current = password;
     });
 
-    // this.displayPanel.opened.subscribe(() => this.preferencesForm.reset());
-    // this.emailPanel.opened.subscribe(() => this.preferencesForm.reset());
-    // this.passwordPanel.opened.subscribe(() => this.preferencesForm.reset());
-    // this.avatarPanel.opened.subscribe(() => this.preferencesForm.reset());
+    this.displayPanel.opened.subscribe(() => this.preferencesForm.reset());
+    this.emailPanel.opened.subscribe(() => this.preferencesForm.reset());
+    this.passwordPanel.opened.subscribe(() => this.preferencesForm.reset());
+    this.avatarPanel.opened.subscribe(() => this.preferencesForm.reset());
   }
 
   get displayError(): ValidationErrors {
@@ -95,15 +99,19 @@ export class PreferencesComponent implements OnInit {
 
   onChange(event: Event) {
 
-    this.targetFiles = event.target['files'];
-    this.upload = this.targetFiles[0];
+    try {
 
-    if (this.upload.type.includes('image')) 
-      this.file = new CustomUpload(this.upload);
+      this.targetFiles = event.target['files'];
+      this.upload = this.targetFiles[0];
 
-    const reader = new FileReader();
-    reader.onload = () => (this.upload['url'] = reader.result);
-    reader.readAsDataURL(this.upload);
+      if (this.upload.type.includes('image'))
+        this.file = new Upload(this.upload);
+
+      const reader = new FileReader();
+      reader.onload = () => (this.upload['url'] = reader.result);
+      reader.readAsDataURL(this.upload);
+
+    } catch(e) { }
 
   }
 
@@ -133,17 +141,25 @@ export class PreferencesComponent implements OnInit {
         const control = this.preferencesForm.get('updateEmail').get('email').invalid;
         if (control) { alert('Form invalid'); return; }
 
-        const form = this.preferencesForm.value['updateEmail'];
-        this.confirmationRef = this.dialog.open(UpdateConfirmationDialogComponent, { data: { form, option: 'email' } });
+        this.reauthRef = this.dialog.open(ReauthDialogComponent);
+        this.reauthRef.beforeClose().subscribe((password: string) => {
+          let form = this.preferencesForm.value['updateEmail'];
+          form['password'] = password;
+          this.confirmationRef = this.dialog.open(UpdateConfirmationDialogComponent, { data: { form, option: 'email' } });
+        });
+
         break;
       }
       case 'password': {
-        const control = this.preferencesForm.get('updatePassword').get('password').invalid;
-        const control2 = this.preferencesForm.get('updatePassword').get('confirm').invalid;
-        if (control || control2) { alert('Form invalid'); return; }
+        const control = this.preferencesForm.get('updatePassword').get('confirm').invalid;
+        if (control) { alert('Form invalid'); return; }
 
-        const form = this.preferencesForm.value['updatePassword'];
-        this.confirmationRef = this.dialog.open(UpdateConfirmationDialogComponent, { data: { form, option: 'password' } });
+        this.reauthRef = this.dialog.open(ReauthDialogComponent);
+        this.reauthRef.beforeClose().subscribe((password: string) => {
+          const form = this.preferencesForm.value['updatePassword'];
+          form['currentPassword'] = password;
+          this.confirmationRef = this.dialog.open(UpdateConfirmationDialogComponent, { data: { form, option: 'password' } });
+        });
         break;
       }
       case 'avatar': {

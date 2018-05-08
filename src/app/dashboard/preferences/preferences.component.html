@@ -96,7 +96,7 @@
 
             <div>
               <div *ngIf="newUrl === ''; else url" id="img-container">
-                <img src="{{ upload?.url || 'https://getl.io/eJjUt' }}" alt="god-madara-uchiha" width="200" height="200">
+                <img src="{{ upload?.url || (user | async)?.avatar?.url }}" alt="god-madara-uchiha" width="200" height="200">
               </div>
               <ng-template #url>
                 <div id="img-container">

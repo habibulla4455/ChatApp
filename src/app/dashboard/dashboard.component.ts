@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import * as _ from "lodash";
 
 import { AuthService } from '../common/core/services/auth.service';
+import { FirestoreService } from '../common/core/services/firestore.service';
 import { SharedService } from '../common/core/services/shared.service';
 
 import { NewRoomDialogComponent } from '../common/shared/components/new-room-dialog/new-room-dialog.component';
@@ -19,7 +20,7 @@ export class DashboardComponent implements OnInit {
   inOtherRoute: boolean = false;
   isChatMode: boolean = false;
 
-  constructor(private router: Router, private dialog: MatDialog, private route: ActivatedRoute, private authService: AuthService, private sharedService: SharedService) { }
+  constructor(private router: Router, private dialog: MatDialog, private route: ActivatedRoute, private authService: AuthService, private firestore: FirestoreService, private sharedService: SharedService) { }
 
   ngOnInit() {
     this.isChatMode = false;
@@ -62,6 +63,9 @@ export class DashboardComponent implements OnInit {
   onSignout() {
     this.authService.signOut()
       .then(() => {
+
+        this.firestore.setUserOffline();
+
         this.router.navigate(['/']);
       })
   }

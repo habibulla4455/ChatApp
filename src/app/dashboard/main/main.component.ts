@@ -86,7 +86,7 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   transfer(): void {
-    const buffer = { host: { display: "uchiha madara", email: "q@q.com", uid: "DuEEQD2s9cbYol48a0xcfxVyE1Z2" }, num_participants: 100000000, room_name: "Public Room", unix: "1525515599" };
+    const buffer = { host: { display: "uchiha madara", email: "q@q.com", uid: "DuEEQD2s9cbYol48a0xcfxVyE1Z2" }, num_participants: Infinity, room_name: "Public Room", unix: "1525515599" };
     this.sharedService.roomDetails = buffer;
     this.router.navigate(['room'], { relativeTo: this.route });
     setTimeout(() => {

@@ -2,7 +2,7 @@
 
   <h3 mat-subheader>Room participants</h3>
   <mat-list-item *ngFor="let participant of (participants | async); last as isLast">
-    <img mat-list-avatar src="https://getl.io/eJjUt">
+    <img mat-list-avatar src="{{ participant?.url }}">
     <h4 mat-line>{{ participant?.user_name }}</h4>
     <p mat-line>
       <span>Joined -- </span>

@@ -2,7 +2,7 @@
 
   <mat-drawer #drawer>
 
-    <p>drawer content</p>
+    <app-drawer-content></app-drawer-content>
 
   </mat-drawer>
 
@@ -10,12 +10,12 @@
 
     <mat-toolbar *ngIf="!isChatMode">
 
-      <!-- <button mat-icon-button (click)="drawer.toggle()" id="menu"> -->
-      <button mat-icon-button (click)="onSignout()" id="menu">
+      <button mat-icon-button (click)="drawer.toggle()" id="menu">
         <mat-icon>menu</mat-icon>
       </button>
 
-      <span [routerLink]="['/', 'dashboard']">Chat Me</span>
+      <!-- <span [routerLink]="['/', 'dashboard']">Chat Me</span> -->
+      <span (click)="onSignout()">Chat Me</span>
 
       <button mat-icon-button (click)="newRoom()" [ngClass]="{ 'add': !inOtherRoute }" [ngStyle]="{ 'display': inOtherRoute ? 'none' : 'block' }">
         <mat-icon>add_box</mat-icon>

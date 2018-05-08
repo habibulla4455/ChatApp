@@ -1,0 +1,12 @@
+<div id="container">
+
+  <form (ngSubmit)="onSubmit()" [formGroup]="passwordForm">
+    <mat-form-field color="accent">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password">
+      <mat-error *ngIf="passwordForm.invalid">This is required.</mat-error>
+    </mat-form-field>
+    <button mat-raised-button>LOGIN</button>
+  </form>
+
+</div>

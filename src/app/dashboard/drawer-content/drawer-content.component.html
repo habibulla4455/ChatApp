@@ -1,0 +1,16 @@
+<mat-list>
+
+  <h3 mat-subheader>Online Users</h3>
+  <mat-list-item *ngFor="let onlineUser of (onlineUsers | async); last as isLast">
+    <img mat-list-avatar src="{{ onlineUser?.url }}">
+    <h4 mat-line *ngIf="onlineUser?.metadata?.status === 'online'"><img src="https://upload.wikimedia.org/wikipedia/commons/d/dc/Button-Green.svg" alt="" width="10"> {{ onlineUser?.display }}</h4>
+    <h4 mat-line *ngIf="onlineUser?.metadata?.status === 'offline'"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Location_dot_grey.svg/2000px-Location_dot_grey.svg.png" alt="" width="10"> {{ onlineUser?.display }}</h4>
+    <p mat-line>
+      <span *ngIf="onlineUser?.metadata?.status === 'online'">Online -- </span>
+      <span *ngIf="onlineUser?.metadata?.status === 'offline'">Offline -- </span>
+      <span class="demo-secondary-text">{{ onlineUser?.timestamp }}</span>
+    </p>
+    <mat-divider inset *ngIf="!isLast"></mat-divider>
+  </mat-list-item>
+
+</mat-list>

@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AuthService } from '../../common/core/services/auth.service';
+import { FirestoreService } from '../../common/core/services/firestore.service';
 
 @Component({
   selector: 'app-login',
@@ -14,10 +15,14 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   isSigningin: boolean;
 
-  constructor(@Inject(FormBuilder) public fb: FormBuilder, private router: Router, private route: ActivatedRoute, private auth: AuthService) {
+  constructor(@Inject(FormBuilder) public fb: FormBuilder, private router: Router, private route: ActivatedRoute, private auth: AuthService, private firestore: FirestoreService) {
+    // this.loginForm = fb.group({
+    //   'email': [ 'q@a.com' ],
+    //   'password': [ '123123' ]
+    // })
     this.loginForm = fb.group({
-      'email': [ 'q@q.com' ],
-      'password': [ '123123' ]
+      'email': [ '' ],
+      'password': [ '' ]
     })
   }
 
@@ -60,9 +65,10 @@ export class LoginComponent implements OnInit {
     this.isSigningin = true;
 
     this.auth.signInWithEmailAndPassword(form.email, form.password)
-      .then((response) => {
+      .then((user) => {
 
         this.isSigningin = false;
+        this.firestore.setUserOnline();
         this.router.navigate(['dashboard'], { relativeTo: this.route });
 
       }).catch((e) => {
