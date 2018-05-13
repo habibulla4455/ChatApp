@@ -8,6 +8,13 @@
   .mat-toolbar {
     display: flex;
 
+    span {
+      display: flex;
+      button {
+        // margin-top: 8px;
+      }
+    }
+
     #menu {
       margin-right: 5px;
     }

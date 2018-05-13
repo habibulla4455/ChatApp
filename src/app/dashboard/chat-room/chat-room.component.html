@@ -12,9 +12,11 @@
     <div id="content-toolbar">
 
       <mat-toolbar>
-        <button mat-icon-button (click)="drawer.toggle()" id="menu">
-          <mat-icon>menu</mat-icon>
-        </button>
+        <span id="menu">
+          <button mat-icon-button (click)="drawer.toggle()">
+            <mat-icon>menu</mat-icon>
+          </button>
+        </span>
 
         <div *ngIf="roomDetails.room_name !== 'Public Room'; else default">
           <span>{{ roomDetails.room_name }}'s room</span>
@@ -24,9 +26,11 @@
           <span>{{ roomDetails.room_name }}</span>
         </ng-template>
 
-        <button mat-icon-button [matMenuTriggerFor]="menu" id="details">
-          <mat-icon>settings</mat-icon>
-        </button>
+        <span id="details">
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>settings</mat-icon>
+          </button>
+        </span>
       </mat-toolbar>
 
     </div>

@@ -10,6 +10,13 @@
     display: flex;
     z-index: 2;
 
+    span {
+      display: flex;
+      button {
+        // margin-top: 8px;
+      }
+    }
+
     #menu {
       margin-right: 5px;
     }

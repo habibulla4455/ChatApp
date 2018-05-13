@@ -12,23 +12,31 @@
 
     <mat-toolbar *ngIf="!isChatMode">
 
-      <button mat-icon-button (click)="drawer.toggle()" id="menu">
-        <mat-icon>menu</mat-icon>
-      </button>
+      <span>
+        <button mat-icon-button (click)="drawer.toggle()" id="menu">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </span>
 
       <span [routerLink]="['/', 'dashboard']">Dark Messenger</span>
 
-      <button mat-icon-button (click)="newRoom()" [ngClass]="{ 'add': !inOtherRoute }" [ngStyle]="{ 'display': inOtherRoute ? 'none' : 'block' }" [disabled]="isAnonymous">
-        <mat-icon>add_box</mat-icon>
-      </button>
+      <span [ngClass]="{ 'add': !inOtherRoute }">
+        <button mat-icon-button (click)="newRoom()"[ngStyle]="{ 'display': inOtherRoute ? 'none' : 'block' }" [disabled]="isAnonymous">
+          <mat-icon>add_box</mat-icon>
+        </button>
+      </span>
 
-      <button mat-icon-button [routerLink]="['/', 'dashboard']" [ngClass]="{ 'add': inOtherRoute }" [ngStyle]="{ 'display': !inOtherRoute ? 'none' : 'block' }" [disabled]="isAnonymous">
-        <mat-icon>dashboard</mat-icon>
-      </button>
+      <span [ngClass]="{ 'add': inOtherRoute }">
+        <button mat-icon-button [routerLink]="['/', 'dashboard']" [ngStyle]="{ 'display': !inOtherRoute ? 'none' : 'block' }" [disabled]="isAnonymous">
+          <mat-icon>dashboard</mat-icon>
+        </button>
+      </span>
 
-      <button mat-icon-button [matMenuTriggerFor]="settings" id="settings">
-        <mat-icon>settings</mat-icon>
-      </button>
+      <span>
+        <button mat-icon-button [matMenuTriggerFor]="settings" id="settings">
+          <mat-icon>settings</mat-icon>
+        </button>
+      </span>
 
     </mat-toolbar>
 

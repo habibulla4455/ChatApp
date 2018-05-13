@@ -2,6 +2,7 @@
 
 /mobile/platforms/**
 /mobile/node_modules/**
+/features.md
 
 /src/environments/**
 
