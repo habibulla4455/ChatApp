@@ -15,7 +15,7 @@ export class DrawerContentComponent implements OnInit {
   constructor(private firestore: FirestoreService) { }
 
   ngOnInit() {
-    this.onlineUsers = this.firestore.onlineUsers;
+    this.onlineUsers = this.firestore.onlineUsers
   }
 
 }

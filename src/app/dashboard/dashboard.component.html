@@ -2,7 +2,9 @@
 
   <mat-drawer #drawer>
 
-    <app-drawer-content></app-drawer-content>
+    <div *ngIf="isDrawerOpened">
+      <app-drawer-content></app-drawer-content>
+    </div>
 
   </mat-drawer>
 
@@ -14,14 +16,13 @@
         <mat-icon>menu</mat-icon>
       </button>
 
-      <!-- <span [routerLink]="['/', 'dashboard']">Chat Me</span> -->
-      <span (click)="onSignout()">Chat Me</span>
+      <span [routerLink]="['/', 'dashboard']">Dark Messenger</span>
 
-      <button mat-icon-button (click)="newRoom()" [ngClass]="{ 'add': !inOtherRoute }" [ngStyle]="{ 'display': inOtherRoute ? 'none' : 'block' }">
+      <button mat-icon-button (click)="newRoom()" [ngClass]="{ 'add': !inOtherRoute }" [ngStyle]="{ 'display': inOtherRoute ? 'none' : 'block' }" [disabled]="isAnonymous">
         <mat-icon>add_box</mat-icon>
       </button>
 
-      <button mat-icon-button [routerLink]="['/', 'dashboard']" [ngClass]="{ 'add': inOtherRoute }" [ngStyle]="{ 'display': !inOtherRoute ? 'none' : 'block' }">
+      <button mat-icon-button [routerLink]="['/', 'dashboard']" [ngClass]="{ 'add': inOtherRoute }" [ngStyle]="{ 'display': !inOtherRoute ? 'none' : 'block' }" [disabled]="isAnonymous">
         <mat-icon>dashboard</mat-icon>
       </button>
 
@@ -40,11 +41,11 @@
 </mat-drawer-container>
 
 <mat-menu #settings>
-  <button mat-menu-item (click)="onProfile()">
+  <button mat-menu-item (click)="onProfile()" [disabled]="isAnonymous">
     <mat-icon>face</mat-icon>
     Profile
   </button>
-  <button mat-menu-item (click)="onPreferences()">
+  <button mat-menu-item (click)="onPreferences()" [disabled]="isAnonymous">
     <mat-icon>account_circle</mat-icon>
     Preferences
   </button>

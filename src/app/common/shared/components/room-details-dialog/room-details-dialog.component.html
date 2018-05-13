@@ -1,7 +1,14 @@
 <div id="container">
+
   <p><strong>Room name: </strong> <span>{{ data.room.room_name }}</span></p>
-  <p><strong>Created by: </strong> <span>{{ data.room.host.display }}</span></p>
-  <div *ngIf="condition">
+
+  <div *ngIf="condition; else option">
+    <p><strong>Created by: </strong> <span>{{ data.room.host.display }}</span></p>
     <p class="m-0"><strong>Created: </strong> <span>{{ data.room.timestamp | timestamp }}</span></p>
   </div>
+
+  <ng-template #option>
+    <p class="m-0"><strong>Created by: </strong> <span>{{ data.room.host.display }}</span></p>
+  </ng-template>
+
 </div>

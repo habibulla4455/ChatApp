@@ -9,25 +9,27 @@
 
   <div id="drawer-content">
 
-    <mat-toolbar>
+    <div id="content-toolbar">
 
-      <button mat-icon-button (click)="drawer.toggle()" id="menu">
-        <mat-icon>menu</mat-icon>
-      </button>
+      <mat-toolbar>
+        <button mat-icon-button (click)="drawer.toggle()" id="menu">
+          <mat-icon>menu</mat-icon>
+        </button>
 
-      <div *ngIf="roomDetails.room_name !== 'Public Room'; else default">
-        <span>{{ roomDetails.room_name }}'s room</span>
-      </div>
+        <div *ngIf="roomDetails.room_name !== 'Public Room'; else default">
+          <span>{{ roomDetails.room_name }}'s room</span>
+        </div>
 
-      <ng-template #default>
-        <span>{{ roomDetails.room_name }}</span>
-      </ng-template>
+        <ng-template #default>
+          <span>{{ roomDetails.room_name }}</span>
+        </ng-template>
 
-      <button mat-icon-button [matMenuTriggerFor]="menu" id="details">
-        <mat-icon>settings</mat-icon>
-      </button>
+        <button mat-icon-button [matMenuTriggerFor]="menu" id="details">
+          <mat-icon>settings</mat-icon>
+        </button>
+      </mat-toolbar>
 
-    </mat-toolbar>
+    </div>
 
     <div id="content-container">
 
@@ -59,21 +61,15 @@
 
       <div id="chat-textbox">
 
-        <div *ngIf="condition; else other" class="w-100">
-          <mat-form-field color="accent" class="w-100">
-            <textarea #message matInput placeholder="TODO: LAST FEATURE" matTextareaAutosize matAutosizeMaxRows="1" maxLength="500" [(ngModel)]="textarea"></textarea>
-            <mat-hint align="end">{{message.value.length}} / 500</mat-hint>
-          </mat-form-field>
-        </div>
-        <ng-template #other class="w-100">
+        <div class="w-100">
           <mat-form-field color="accent" class="w-100">
             <textarea #message matInput placeholder="Type a message." matTextareaAutosize matAutosizeMaxRows="1" maxLength="500" [(ngModel)]="textarea"></textarea>
             <mat-hint align="end">{{message.value.length}} / 500</mat-hint>
           </mat-form-field>
-        </ng-template>
+        </div>
 
         <div id="send">
-          <button mat-icon-button (click)="onSubmit()" [disabled]="condition ? true : false">
+          <button mat-icon-button (click)="onSubmit()">
             <mat-icon>send</mat-icon>
           </button>
         </div>

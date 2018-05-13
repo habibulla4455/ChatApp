@@ -12,6 +12,10 @@ import { DrawerContentComponent } from './drawer-content/drawer-content.componen
 import { NewRoomDialogComponent } from '../common/shared/components/new-room-dialog/new-room-dialog.component';
 import { JoinRoomConfirmationDialogComponent } from '../common/shared/components/join-room-confirmation-dialog/join-room-confirmation-dialog.component';
 
+import { TimestampPipe } from '../common/shared/pipes/timestamp4.pipe';
+
+import { DashboardResolver } from './dashboard.resolver';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -29,6 +33,10 @@ import { JoinRoomConfirmationDialogComponent } from '../common/shared/components
     DrawerContentComponent,
     NewRoomDialogComponent,
     JoinRoomConfirmationDialogComponent,
+    TimestampPipe
+  ],
+  providers: [
+    DashboardResolver
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

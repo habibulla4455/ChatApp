@@ -2,7 +2,6 @@
 
 /mobile/platforms/**
 /mobile/node_modules/**
-/mobile/www/**
 
 /src/environments/**
 

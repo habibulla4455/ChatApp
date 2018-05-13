@@ -19,11 +19,11 @@ export class LoginComponent implements OnInit {
     // this.loginForm = fb.group({
     //   'email': [ 'q@a.com' ],
     //   'password': [ '123123' ]
-    // })
+    // });
     this.loginForm = fb.group({
       'email': [ '' ],
       'password': [ '' ]
-    })
+    });
   }
 
   ngOnInit() {
@@ -33,16 +33,10 @@ export class LoginComponent implements OnInit {
   onSigninAnonymously() {
     this.isSigningin = true;
 
-    this.auth.signInAnonymously()
-      .then((response) => {
+    this.firestore.signInAnonymously()
+      .catch((e) => {
 
-        this.isSigningin = false;
-        this.router.navigate(['dashboard'], { relativeTo: this.route });
-
-      }).catch((e) => {
-
-        this.loginForm.reset();
-        alert(e.message);
+        alert(e.message)
 
       });
   }
@@ -68,7 +62,8 @@ export class LoginComponent implements OnInit {
       .then((user) => {
 
         this.isSigningin = false;
-        this.firestore.setUserOnline();
+        this.auth.enableNetwork();
+        this.firestore.setUserStatus(true, false);
         this.router.navigate(['dashboard'], { relativeTo: this.route });
 
       }).catch((e) => {

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 
 import { SharedService } from './common/core/services/shared.service';
 
@@ -9,8 +8,7 @@ import { SharedService } from './common/core/services/shared.service';
 })
 export class AppComponent {
 
-  constructor(private router: Router, private route: ActivatedRoute, private sharedService: SharedService) {
-    // this.router.navigate(['dashboard']);
+  constructor(private sharedService: SharedService) {
     this.sharedService.modeValue = true;
   }
 

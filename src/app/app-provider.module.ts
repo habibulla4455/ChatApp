@@ -13,6 +13,8 @@ import * as firebase from 'firebase';
 import { AuthService } from './common/core/services/auth.service';
 import { FirestoreService } from './common/core/services/firestore.service';
 import { SharedService } from './common/core/services/shared.service';
+import { DashboardResolver } from './dashboard/dashboard.resolver';
+import { LandingPageGuard } from './landing-page/landing-page.guard';
 
 import { environment } from '../environments/environment';
 
@@ -34,7 +36,9 @@ import { environment } from '../environments/environment';
   providers: [
     AuthService,
     FirestoreService,
-    SharedService
+    SharedService,
+    DashboardResolver,
+    LandingPageGuard,
   ]
 })
 export class AppProviderModule {

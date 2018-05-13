@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
-// import { DocumentChangeType, DocumentChange, QueryDocumentSnapshot } from '@firebase/firestore-types';
-import { take } from 'rxjs/operators';
+import { DocumentChangeType, DocumentChange, QueryDocumentSnapshot } from '@firebase/firestore-types';
+import { Subscription } from 'rxjs/Subscription';
+import { take, first } from 'rxjs/operators';
 import * as moment from 'moment';
 import * as _ from "lodash";
 
@@ -21,18 +22,22 @@ export class FirestoreService {
   participantsRef: AngularFirestoreCollection<any>;
   onlineUsersRef: AngularFirestoreCollection<any>;
 
+  onlineSubscription: Subscription;
+
   constructor(private firestore: AngularFirestore, private router: Router, private route: ActivatedRoute, private auth: AuthService) {
     this.usersRef = firestore.collection('users');
     this.roomsRef = firestore.collection('rooms');
-    this.messagesRef = firestore.collection('messages')
-    this.participantsRef = firestore.collection('participants')
-    this.onlineUsersRef = firestore.collection('online')
+    this.messagesRef = firestore.collection('messages');
+    this.participantsRef = firestore.collection('participants');
+    this.onlineUsersRef = firestore.collection('online');
   }
 
   // ADD NEW USER
   createNewUser(user: User) {
     return this.auth.createUserWithEmailAndPassword(user.email, user.password)
       .then((response: any) => {
+
+        this.auth.enableNetwork();
 
         const uid = <string>response.uid;
         const avatar = { url: 'https://getl.io/eJjUt' };
@@ -42,10 +47,35 @@ export class FirestoreService {
         const metadata = new Metadata('online', timestamp);
         const online = new OnlineUsers(uid, user.display, timestamp);
 
+        this.setUserStatus(true, false);
+
         this.usersRef.add({ ...newUser  })
           .then(() => (this.router.navigate(['dashboard'], { relativeTo: this.route })));
 
         this.onlineUsersRef.add({ ...online, metadata: { ...metadata } });
+
+      });
+  }
+
+  signInAnonymously() {
+    return this.auth.signInAnonymously()
+      .then((response: any) => {
+
+        this.auth.enableNetwork();
+
+        const uid = <string>response.uid;
+        const avatar = { url: 'http://www.pngmart.com/files/5/Anonymous-PNG-Pic.png' };
+        const timestamp = moment().format('X');
+        const anonymousUser = new UserModel(uid, 'anonymous@z.com', '123123', 'Anonymous User', timestamp, avatar);
+
+        const online = new OnlineUsers(uid, 'Anonymous User', timestamp);
+
+        this.setUserStatus(true, true);
+
+        this.usersRef.add({ ...anonymousUser  })
+          .then(() => (this.router.navigate(['dashboard'], { relativeTo: this.route })));
+
+        this.onlineUsersRef.add({ ...online, metadata: { status: 'online', timestamp } });
 
       });
   }
@@ -71,9 +101,19 @@ export class FirestoreService {
 
   }
 
-  setUserOnline(option: string = 'online') {
+  setUserStatus(option: boolean = undefined, isAnonymous: boolean = undefined) {
 
-    this.onlineUsersRef.snapshotChanges().pipe(  ).map((action: any[]) => {
+    if (this.auth.auth.auth.currentUser.isAnonymous === true && isAnonymous !== true) {
+      this.auth.auth.auth.currentUser.delete();
+      this.auth.signOut()
+        .then(() => {
+          this.auth.disableNetwork();
+          this.onlineSubscription.unsubscribe();
+          this.router.navigate(['/']);
+        })
+    }
+
+    this.onlineSubscription = this.onlineUsersRef.snapshotChanges().pipe( ).map((action: any[]) => {
 
       return action.map((change: any) => {
         const document = <any>change.payload.doc;
@@ -82,21 +122,33 @@ export class FirestoreService {
         if (document.get('uid') === uid) {
 
           const timestamp = moment().format('X');
-          const meta = { status: option, timestamp };
-
           let newData = document.data();
-          newData['metadata'] = meta;
-          document.ref.set(newData, { merge: true });
+
+          const forTrue = () => {
+            newData['metadata'] = { status: 'online', timestamp };
+            document.ref.set(newData, { merge: true });
+            this.onlineSubscription.unsubscribe();
+          };
+
+          const forFalse = () => {
+
+            newData['metadata'] = { status: 'offline', timestamp };
+            document.ref.set(newData, { merge: true });
+            this.auth.signOut()
+              .then(() => {
+                this.auth.disableNetwork();
+                this.onlineSubscription.unsubscribe();
+                this.router.navigate(['/']);
+              });
+
+          };
+
+          option ? forTrue() : forFalse();
 
         }
       });
 
-    }).subscribe(() => { });
-  }
-
-  setUserOffline(option: string = 'false') {
-
-    this.setUserOnline(option);
+    }).subscribe(() => {  });
 
   }
 
@@ -105,11 +157,12 @@ export class FirestoreService {
 
     const uid = this.auth.uid;
     const timestamp = moment().format('X');
+    const isAnonymous = this.auth.auth.auth.currentUser.isAnonymous;
 
     const newMessage = new MessageModel(uid, message, timestamp);
     delete newMessage.emojis;
 
-    return this.messagesRef.add({ ...newMessage, room_name });
+    return this.messagesRef.add({ ...newMessage, room_name, isAnonymous });
 
   }
 
@@ -131,7 +184,9 @@ export class FirestoreService {
       return messages.map((message) => {
         return message.map((_message) => {
           const _user = user.filter(e => e.uid === _message.uid)[0];
-          return { ..._message, url: _user.avatar.url }
+          if (_user !== undefined) {
+            return { ..._message, url: _user.avatar.url }
+          }
         })
       })
     });
@@ -192,13 +247,11 @@ export class FirestoreService {
     const users = this.usersRef.valueChanges();
 
     return onlineUsers.switchMap((_onlineUsers) => {
-
       return users.map((_users) => {
-        const uid = this.auth.uid;
         return _onlineUsers.map((element) => {
-          const url =_users.filter(e => e.uid === element.uid)[0].avatar.url;
-          return { ...element, url };
-        })
+          const user = _users.filter(e => e.uid === element.uid)[0];
+          return user !== undefined ? { ...element, url: user.avatar.url } : 0;
+        }).filter(anon => anon.display !== 'Anonymous User');
       })
 
     });
@@ -252,6 +305,68 @@ export class FirestoreService {
         });
       }
     );
+
+  }
+
+  removeAnonymousData() {
+
+    this.usersRef.snapshotChanges().map((action: any[]) => {
+
+      return action.map((change: any) => {
+        const document = <any>change.payload.doc;
+
+        if (document.get('display') === 'Anonymous User') {
+          document.ref.delete()
+        } else {
+          return document.data();
+        }
+
+      });
+
+    }).subscribe((response) => { });
+
+    this.participantsRef.snapshotChanges().map((action: any[]) => {
+
+      return action.map((change: any) => {
+        const document = <any>change.payload.doc;
+
+        if (document.get('user_name') === 'Anonymous User') {
+          document.ref.delete()
+        } else {
+          return document.data();
+        }
+
+      });
+
+    }).subscribe((response) => { });
+
+    this.onlineUsersRef.snapshotChanges().map((action: any[]) => {
+
+      return action.map((change: any) => {
+        const document = <any>change.payload.doc;
+
+        if (document.get('display') === 'Anonymous User') {
+          document.ref.delete()
+        } else {
+          return document.data();
+        }
+      });
+
+    }).subscribe((response) => { });
+
+    this.messagesRef.snapshotChanges().map((action: any[]) => {
+
+      return action.map((change: any) => {
+        const document = <any>change.payload.doc;
+
+        if (document.get('isAnonymous') === true) {
+          document.ref.delete()
+        } else {
+          return document.data();
+        }
+      });
+
+    }).subscribe((response) => { });
 
   }
 

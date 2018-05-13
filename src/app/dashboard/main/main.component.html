@@ -3,7 +3,7 @@
     <div>
       <span>Public Room</span><br>
     </div>
-    <button mat-icon-button color="accent" (click)="onEnterPublic()" [disabled]="false">
+    <button mat-icon-button color="accent" (click)="onEnterPublic()">
       <mat-icon>keyboard_arrow_right</mat-icon>
     </button>
   </mat-card-content>
@@ -17,7 +17,7 @@
       <div>
         <span>{{ room.room_name }}</span><br>
       </div>
-      <button mat-icon-button color="accent" (click)="onEnterRoom(room)">
+      <button mat-icon-button color="accent" (click)="onEnterRoom(room)" [disabled]="isAnonymous">
         <mat-icon>keyboard_arrow_right</mat-icon>
       </button>
     </mat-card-content>

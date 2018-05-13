@@ -13,7 +13,7 @@ export class RoomDetailsDialogComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
-    this.condition = this.data.num_participants !== Infinity;
+    this.condition = this.data.room.num_participants !== Infinity;
   }
 
 }

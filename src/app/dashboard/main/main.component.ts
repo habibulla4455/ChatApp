@@ -21,12 +21,16 @@ export class MainComponent implements OnInit, OnDestroy {
   joinRoomConfirmationDialog: MatDialogRef<JoinRoomConfirmationDialogComponent>;
   rooms: Observable<any>;
   interval: Subscription;
+  isAnonymous: boolean = false;
 
   constructor(private router: Router, private route: ActivatedRoute, private dialog: MatDialog, private firestore: FirestoreService, private sharedService: SharedService) { }
 
   ngOnInit() {
     this.rooms = this.firestore.rooms;
-    // this.transfer();
+
+    this.route.data.subscribe((data) => {
+      this.isAnonymous = data.user;
+    });
   }
 
   ngOnDestroy() {
@@ -60,7 +64,7 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   onEnterPublic() {
-    const publicRoom = { host: { display: "uchiha madara", email: "q@q.com", uid: "DuEEQD2s9cbYol48a0xcfxVyE1Z2" }, num_participants: Infinity, room_name: "Public Room", unix: "1525515599" };
+    const publicRoom = { host: { display: "Admin", email: "q@a.com", uid: "DuEEQD2s9cbYol48a0xcfxVyE1Z2" }, num_participants: Infinity, room_name: "Public Room" };
     this.sharedService.roomDetails = publicRoom;
     this.interval = interval(1).subscribe(() => {
       this.routeToRoom(publicRoom);
@@ -83,24 +87,6 @@ export class MainComponent implements OnInit, OnDestroy {
   routeToRoom(room: any) {
     this.sharedService.roomDetails = room;
     this.router.navigate(['room'], { relativeTo: this.route });
-  }
-
-  transfer(): void {
-    const buffer = { host: { display: "uchiha madara", email: "q@q.com", uid: "DuEEQD2s9cbYol48a0xcfxVyE1Z2" }, num_participants: Infinity, room_name: "Public Room", unix: "1525515599" };
-    this.sharedService.roomDetails = buffer;
-    this.router.navigate(['room'], { relativeTo: this.route });
-    setTimeout(() => {
-      this.sharedService.roomDetails = buffer;
-      this.router.navigate(['room'], { relativeTo: this.route });
-    }, 100);
-    setTimeout(() => {
-      this.sharedService.roomDetails = buffer;
-      this.router.navigate(['room'], { relativeTo: this.route });
-    }, 200);
-    setTimeout(() => {
-      this.sharedService.roomDetails = buffer;
-      this.router.navigate(['room'], { relativeTo: this.route });
-    }, 400);
   }
 
 }

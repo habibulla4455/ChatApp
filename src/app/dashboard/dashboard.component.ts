@@ -1,6 +1,6 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef, MatDrawer } from '@angular/material';
 import * as _ from "lodash";
 
 import { AuthService } from '../common/core/services/auth.service';
@@ -16,13 +16,18 @@ import { NewRoomDialogComponent } from '../common/shared/components/new-room-dia
 })
 export class DashboardComponent implements OnInit {
 
+  @ViewChild('drawer') drawer: MatDrawer;
+
   newRoomDialogComponent: MatDialogRef<NewRoomDialogComponent>;
   inOtherRoute: boolean = false;
   isChatMode: boolean = false;
+  isDrawerOpened: boolean = false;
+  isAnonymous: boolean = false;
 
-  constructor(private router: Router, private dialog: MatDialog, private route: ActivatedRoute, private authService: AuthService, private firestore: FirestoreService, private sharedService: SharedService) { }
+  constructor(private router: Router, private dialog: MatDialog, private route: ActivatedRoute, private authService: AuthService, private firestore: FirestoreService, private auth: AuthService, private sharedService: SharedService) { }
 
   ngOnInit() {
+
     this.isChatMode = false;
 
     this.router.events.filter(e => e instanceof NavigationEnd).subscribe((response: NavigationEnd) => {
@@ -44,6 +49,21 @@ export class DashboardComponent implements OnInit {
       const c = route.includes('preferences');
       this.inOtherRoute = a || b || c;
     });
+
+    this.drawer.openedStart.subscribe(() => {
+      this.isDrawerOpened = true;
+    });
+
+    this.drawer.closedStart.subscribe(() => {
+      this.isDrawerOpened = false;
+    });
+
+    this.route.data.subscribe((data) => {
+      this.isAnonymous = data.user;
+    });
+
+    // this.firestore.removeAnonymousData();
+
   }
 
   onProfile() {
@@ -61,13 +81,9 @@ export class DashboardComponent implements OnInit {
   }
 
   onSignout() {
-    this.authService.signOut()
-      .then(() => {
 
-        this.firestore.setUserOffline();
+    this.firestore.setUserStatus(false, false);
 
-        this.router.navigate(['/']);
-      })
   }
 
 }
