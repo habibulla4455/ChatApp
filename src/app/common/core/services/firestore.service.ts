@@ -95,7 +95,8 @@ export class FirestoreService {
     }).subscribe((host) => {
 
       delete host.password;
-      return this.roomsRef.add({ ...room, host, timestamp: moment().format('X') });
+      this.roomsRef.add({ ...room, host, timestamp: moment().format('X') });
+      user.unsubscribe();
 
     });
 
@@ -113,7 +114,7 @@ export class FirestoreService {
         })
     }
 
-    this.onlineSubscription = this.onlineUsersRef.snapshotChanges().pipe( ).map((action: any[]) => {
+    const toOnline = this.onlineUsersRef.snapshotChanges().pipe( ).map((action: any[]) => {
 
       return action.map((change: any) => {
         const document = <any>change.payload.doc;
@@ -127,8 +128,30 @@ export class FirestoreService {
           const forTrue = () => {
             newData['metadata'] = { status: 'online', timestamp };
             document.ref.set(newData, { merge: true });
-            this.onlineSubscription.unsubscribe();
+            toOnline.unsubscribe();
           };
+
+          const forFalse = () => { };
+
+          option ? forTrue() : forFalse();
+
+        }
+      });
+
+    }).subscribe(() => {  });
+
+    const toOffline = this.onlineUsersRef.snapshotChanges().pipe( ).map((action: any[]) => {
+
+      return action.map((change: any) => {
+        const document = <any>change.payload.doc;
+        const uid = this.auth.uid;
+
+        if (document.get('uid') === uid) {
+
+          const timestamp = moment().format('X');
+          let newData = document.data();
+
+          const forTrue = () => { };
 
           const forFalse = () => {
 
@@ -137,7 +160,7 @@ export class FirestoreService {
             this.auth.signOut()
               .then(() => {
                 this.auth.disableNetwork();
-                this.onlineSubscription.unsubscribe();
+                toOffline.unsubscribe();
                 this.router.navigate(['/']);
               });
 
@@ -199,7 +222,7 @@ export class FirestoreService {
     const timestamp = moment().format('X');
     const participant = new Participants(uid, user.display, timestamp, room.room_name, user.avatar.url);
 
-    this.participantsRef.valueChanges().pipe( take(1) ).subscribe((response: any[]) => {
+    const participantSubscription = this.participantsRef.valueChanges().pipe( take(1) ).subscribe((response: any[]) => {
 
       const length = response
         .filter((e) => e.room_name === room.room_name)
@@ -220,6 +243,8 @@ export class FirestoreService {
 
           })
         : null;
+
+      participantSubscription.unsubscribe();
 
     });
 
