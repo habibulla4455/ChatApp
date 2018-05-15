@@ -36,11 +36,11 @@ Mobile app school project in COE184P. Angular Chat application wrapped in Cordov
 
 ### Firebase setup
 
-1. Create Firebase account
-1. Go to console
-1. Create new project
-1. Select **Database** > **Cloud Firestore**
-1. Go to **RULES  **, and paste this code
+1. Create Firebase account.
+1. Go to console.
+1. Create new project.
+1. Select **Database** > **Cloud Firestore**.
+1. Go to **RULES  **, and paste this code.
     ```
       service cloud.firestore {
         match /databases/{database}/documents {
@@ -53,7 +53,7 @@ Mobile app school project in COE184P. Angular Chat application wrapped in Cordov
         }
       }
     ```
-1. Go to **Storage** > **RULES** and paste this code
+1. Go to **Storage** > **RULES** and paste this code.
     ```
       service firebase.storage {
         match /b/{bucket}/o {
@@ -63,13 +63,12 @@ Mobile app school project in COE184P. Angular Chat application wrapped in Cordov
         }
       }
     ```
-1. In your project root folder create go to src/environment
-1. In environment folder create  `environment.prod.ts` and `environment.ts`
-1. Go to firebase console and select your project
-1. Go to **Authentication** and click **WEB SETUP**
-1. Copy and paste **apiKey**, **authDomain**, **databaseURL**, **projectId** and **storageBucket** in environment
+1. In your project root folder create go to src/environment and create  `environment.prod.ts` and `environment.ts`.
+1. Go to firebase console and select your project.
+1. Go to **Authentication** and click **WEB SETUP**.
+1. Copy and paste **apiKey**, **authDomain**, **databaseURL**, **projectId** and **storageBucket** in environment.
     ```
-    // Do the same in environment.prod.ts copy and paste firebaseConfig
+    // Do the same in environment.prod.ts, copy and paste firebaseConfig
 
     // environment.ts
     export const environment = {
@@ -83,33 +82,36 @@ Mobile app school project in COE184P. Angular Chat application wrapped in Cordov
       }
     };
     ```
-1. In **Authentication** go to **SIGN-IN METHOD** and enable ***Email/Password*** and ***Anonymous***
+1. In **Authentication** go to **SIGN-IN METHOD** and enable ***Email/Password*** and ***Anonymous***.
 
 
 ### Mobile environment setup
 
 If you are already building apps using NativeScript, React Native or in Native please continue to  **Installing app apk**.
 
-1. Install Node.js LTS version
-1. Install the Cordova CLI `npm i -g cordova`
+1. Install Node.js LTS version.
+1. Install the Cordova CLI `npm i -g cordova`.
 1. Setup mobile development follow the steps in this [link][1] (Windows).
-  * For MacOS [link][2]
-  * For Linux [link][3]
+    * For MacOS [link][2].
+    * For Linux [link][3].
 
 
-### Installing app apk
+### Install app apk
 
-1. Open terminal in root and run `npm run build`
-1. Copy the files in dist folder
-1. Paste files in `./mobile/www`
-1. Open terminal in www folder and run `cordova run android`
+1. Open terminal in root and run `ng build --prod`.
+1. Copy the files in dist folder.
+1. Paste files in `./mobile/www`.
+1. Open terminal in www folder and run `cordova run android`.
 
-### Running in browser
+### Run in browser
 
-Press `F12` followed by `Ctrl + Shift + M`
+1. Open terminal in root folder.
+1. Run `ng serve --open`, open in.
+1. In `localhost: 4200`, press `F12` followed by `Ctrl + Shift + M`.
+
 
 #### Note:
-The app is designed to run in mobile. If you have problems running the application in the browser, refresh (F5) the application in `/dashboard` route
+The app is designed to run in mobile. If you have problems running the application in browser, refresh tab in `/dashboard` route.
 
 ## License
 
