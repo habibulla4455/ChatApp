@@ -10,6 +10,8 @@ import { PreferenceService } from '../../../core/services/preference.service';
 })
 export class UpdateConfirmationDialogComponent implements OnInit {
 
+  isShow: boolean = false;
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<UpdateConfirmationDialogComponent>, private preferenceService: PreferenceService) { }
 
   ngOnInit() {
@@ -20,6 +22,8 @@ export class UpdateConfirmationDialogComponent implements OnInit {
   }
 
   onUpdate() {
+    this.isShow = true;
+
     switch(this.data.option) {
       case 'display':
         this.updateDisplay();

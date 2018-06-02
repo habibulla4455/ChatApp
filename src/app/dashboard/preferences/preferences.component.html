@@ -12,7 +12,7 @@
 
             <div formGroupName="updateDisplay">
               <mat-form-field appearance="outline" color="accent">
-                <mat-label>Display name</mat-label>
+                <mat-label>New display name</mat-label>
                 <input matInput type="text" formControlName="display">
                 <mat-error *ngIf="this.preferencesForm.get('updateDisplay').get('display').invalid">
                   <mat-error *ngIf="displayError.required; else error">This is required.</mat-error>
@@ -41,7 +41,7 @@
 
             <div formGroupName="updateEmail">
               <mat-form-field appearance="outline" color="accent">
-                <mat-label>Email address</mat-label>
+                <mat-label>New email address</mat-label>
                 <input matInput type="text" formControlName="email">
                 <mat-error *ngIf="this.preferencesForm.get('updateEmail').get('email').invalid">
                   <mat-error *ngIf="emailError.required">This is required.</mat-error>
@@ -65,7 +65,7 @@
 
             <div formGroupName="updatePassword">
               <mat-form-field appearance="outline" color="accent">
-                <mat-label>Current password</mat-label>
+                <mat-label>New password</mat-label>
                 <input matInput type="password" formControlName="password">
                 <mat-error *ngIf="this.preferencesForm.get('updatePassword').get('password').invalid">
                   <mat-error *ngIf="passwordError.required">This is required.</mat-error>
@@ -73,7 +73,7 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field appearance="outline" color="accent">
-                <mat-label>Confirm password</mat-label>
+                <mat-label>Repeat new password</mat-label>
                 <input matInput type="password" formControlName="confirm">
                 <mat-error *ngIf="this.preferencesForm.get('updatePassword').get('confirm').invalid">
                   <mat-error *ngIf="confirmError.required">This is required.</mat-error>

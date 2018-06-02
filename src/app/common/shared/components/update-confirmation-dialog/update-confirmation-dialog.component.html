@@ -1,8 +1,15 @@
-<div id="container">
-  <p>Save changes?</p>
+<mat-card>
+  <mat-card-content>
+    <div id="container">
+      <p>Save changes?</p>
 
-  <base href="#" target="_blank">
+      <base href="#" target="_blank">
 
-  <button mat-raised-button color="warn" (click)="onCancel()" id="cancel">CANCEL</button>
-  <button mat-raised-button color="accent" (click)="onUpdate()" id="update">UPDATE</button>
-</div>
+      <button mat-raised-button color="warn" (click)="onCancel()" id="cancel">CANCEL</button>
+      <button mat-raised-button color="accent" (click)="onUpdate()" id="update">UPDATE</button>
+    </div>
+  </mat-card-content>
+  <mat-card-footer *ngIf="isShow">
+    <mat-progress-bar mode="indeterminate" [color]="color"></mat-progress-bar>
+  </mat-card-footer>
+</mat-card>
