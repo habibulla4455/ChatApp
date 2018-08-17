@@ -2,11 +2,16 @@ import { Injectable } from '@angular/core';
 import { FirebaseApp } from 'angularfire2';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class AuthService {
 
+  state: any;
+
   constructor(private afAuth: AngularFireAuth, private fbApp: FirebaseApp, private router: Router) {
+    this.state = afAuth.authState;
+
     afAuth.authState.subscribe((state) => {
       if (state !== null) {
         console.log(state);

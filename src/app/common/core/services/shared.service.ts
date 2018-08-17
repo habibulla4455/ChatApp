@@ -4,12 +4,17 @@ import { Subject } from 'rxjs/Subject';
 @Injectable()
 export class SharedService {
 
+  enterChange: Subject<any> = new Subject<any>();
   roomChanged: Subject<any> = new Subject<any>();
   modeChanged: Subject<boolean> = new Subject<boolean>();
 
   room: any;
 
   constructor() { }
+
+  set setEnter(mode: boolean) {
+    this.enterChange.next(mode);
+  }
 
   set roomDetails(room: any) {
     this.roomChanged.next(room);

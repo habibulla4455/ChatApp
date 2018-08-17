@@ -15,6 +15,7 @@ import { JoinRoomConfirmationDialogComponent } from '../common/shared/components
 import { TimestampPipe } from '../common/shared/pipes/timestamp4.pipe';
 
 import { DashboardResolver } from './dashboard.resolver';
+import { RoomGuard } from '../common/core/services/route-guard.service';
 
 @NgModule({
   imports: [
@@ -36,7 +37,8 @@ import { DashboardResolver } from './dashboard.resolver';
     TimestampPipe
   ],
   providers: [
-    DashboardResolver
+    DashboardResolver,
+    RoomGuard
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

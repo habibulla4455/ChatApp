@@ -15,6 +15,7 @@ import { FirestoreService } from './common/core/services/firestore.service';
 import { SharedService } from './common/core/services/shared.service';
 import { DashboardResolver } from './dashboard/dashboard.resolver';
 import { LandingPageGuard } from './landing-page/landing-page.guard';
+import { EntryGuard, ExitGuard } from './common/core/services/route-guard.service';
 
 import { environment } from '../environments/environment';
 
@@ -39,6 +40,8 @@ import { environment } from '../environments/environment';
     SharedService,
     DashboardResolver,
     LandingPageGuard,
+    EntryGuard,
+    ExitGuard
   ]
 })
 export class AppProviderModule {

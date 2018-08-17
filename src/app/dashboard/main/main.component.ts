@@ -26,6 +26,8 @@ export class MainComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private route: ActivatedRoute, private dialog: MatDialog, private firestore: FirestoreService, private sharedService: SharedService) { }
 
   ngOnInit() {
+    this.sharedService.setEnter = false;
+
     this.rooms = this.firestore.rooms;
 
     this.route.data.subscribe((data) => {
@@ -39,6 +41,8 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   onEnterRoom(room: any) {
+    this.sharedService.setEnter = true;
+
     let i = 0;
     this.joinRoomConfirmationDialog = this.dialog.open(JoinRoomConfirmationDialogComponent, { data: { room } });
     this.joinRoomConfirmationDialog.afterClosed().subscribe((response: any) => {
@@ -64,6 +68,8 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   onEnterPublic() {
+    this.sharedService.setEnter = true;
+    
     const publicRoom = { host: { display: "Admin", email: "q@a.com", uid: "DuEEQD2s9cbYol48a0xcfxVyE1Z2" }, num_participants: Infinity, room_name: "Public Room" };
     this.sharedService.roomDetails = publicRoom;
     this.interval = interval(1).subscribe(() => {
